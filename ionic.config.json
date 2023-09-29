@@ -1,0 +1,7 @@
+{
+  "name": "wize",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
