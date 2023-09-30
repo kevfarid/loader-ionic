@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: 'img[appErrorFallbackImage]',
+  selector: 'img[coreErrorFallbackImage]',
 })
 export class ErrorFallbackImageDirective {
   constructor(private el: ElementRef, private renderer: Renderer2) {}

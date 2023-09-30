@@ -1,12 +1,5 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { Observable, interval, Subject } from 'rxjs';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -16,11 +9,8 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class LoaderComponent implements OnInit, OnDestroy {
   @Input() images: string[] = [];
-  @Input() isLoading: boolean = true;
+  @Input() timeout: number = 1000;
 
-  @Output() finished: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-  readonly TIMEOUT_CHANGE_IMAGE = 1000;
   private unsubscribe$ = new Subject<void>();
 
   currentImage: string = '';
@@ -33,32 +23,19 @@ export class LoaderComponent implements OnInit, OnDestroy {
   }
 
   start() {
-    const interval$ = interval(this.TIMEOUT_CHANGE_IMAGE);
+    const interval$ = interval(this.timeout);
 
     interval$
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(() => this.nextImage());
+      .subscribe(() => this.changeImage());
   }
 
-  finish() {
-    this.finished.emit(true);
-  }
-
-  nextImage() {
+  private changeImage() {
     const index = this.images.indexOf(this.currentImage);
     if (index < this.images.length - 1) {
       this.currentImage = this.images[index + 1];
     } else {
       this.currentImage = this.images[0];
-    }
-  }
-
-  prevImage() {
-    const index = this.images.indexOf(this.currentImage);
-    if (index > 0) {
-      this.currentImage = this.images[index - 1];
-    } else {
-      this.currentImage = this.images[this.images.length - 1];
     }
   }
 
